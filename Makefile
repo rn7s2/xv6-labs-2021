@@ -67,7 +67,7 @@ endif
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
-#TOOLPREFIX = 
+TOOLPREFIX = riscv64-unknown-freebsd13.0-
 
 # Try to infer the correct TOOLPREFIX if not set
 ifndef TOOLPREFIX
@@ -168,7 +168,7 @@ $U/_forktest: $U/forktest.o $(ULIB)
 	$(OBJDUMP) -S $U/_forktest > $U/forktest.asm
 
 mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
-	gcc $(XCFLAGS) -Werror -Wall -I. -o mkfs/mkfs mkfs/mkfs.c
+	cc $(XCFLAGS) -Werror -Wall -I. -o mkfs/mkfs mkfs/mkfs.c
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
 # that disk image changes after first build are persistent until clean.  More
@@ -230,10 +230,10 @@ $U/_uthread: $U/uthread.o $U/uthread_switch.o $(ULIB)
 	$(OBJDUMP) -S $U/_uthread > $U/uthread.asm
 
 ph: notxv6/ph.c
-	gcc -o ph -g -O2 $(XCFLAGS) notxv6/ph.c -pthread
+	cc -o ph -g -O2 $(XCFLAGS) notxv6/ph.c -pthread
 
 barrier: notxv6/barrier.c
-	gcc -o barrier -g -O2 $(XCFLAGS) notxv6/barrier.c -pthread
+	cc -o barrier -g -O2 $(XCFLAGS) notxv6/barrier.c -pthread
 endif
 
 ifeq ($(LAB),lock)
@@ -265,7 +265,7 @@ fs.img: mkfs/mkfs README $(UEXTRA) $(UPROGS)
 
 -include kernel/*.d user/*.d
 
-clean: 
+clean:
 	rm -f *.tex *.dvi *.idx *.aux *.log *.ind *.ilg \
 	*/*.o */*.d */*.asm */*.sym \
 	$U/initcode $U/initcode.out $K/kernel fs.img \
